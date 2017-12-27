@@ -30,7 +30,10 @@ int main(int argc, char* argv[]){
 
   // op is OPCODE or ADDRESS LABEL
   while(cin >> op){
-    if(op.substr(0, 2) == "//") continue;
+    if(op.substr(0, 2) == "//"){
+      int c = cin.get();
+      while(c != '\n' && c != EOF);
+    }
     // ADDRESS LABEL
     if( op[ op.size() - 1 ] == ':' ){
       string label = op.substr(0, op.size()-1);
