@@ -1,2 +1,2 @@
 # PURPOSE
-Check all operations
+Check RET operations

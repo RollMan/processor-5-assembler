@@ -47,12 +47,12 @@ int main(int argc, char* argv[]){
     }
 
     // OPCODE
-    string arg;
-    cin >> arg;
     if(op == "RET"){
       res.push_back(op_code.v[op]);
       res.push_back((u_int16_t)0);
     }else{
+      string arg;
+      cin >> arg;
       if(arg[0] == '#'){
         res.push_back(op_code.v[op]);
         arg = arg.substr(1, arg.size()-1);

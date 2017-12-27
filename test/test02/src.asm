@@ -1,0 +1,3 @@
+LDA #23
+RET
+STA 4
