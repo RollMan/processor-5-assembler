@@ -32,8 +32,10 @@ int main(int argc, char* argv[]){
   while(cin >> op){
     if(op.substr(0, 2) == "//"){
       int c = cin.get();
-      while(c != '\n' && c != EOF);
+      while(c != '\n' && c != EOF) c = cin.get();
+      continue;
     }
+    cout << op << endl;
     // ADDRESS LABEL
     if( op[ op.size() - 1 ] == ':' ){
       string label = op.substr(0, op.size()-1);
