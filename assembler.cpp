@@ -28,11 +28,13 @@ int main(int argc, char* argv[]){
   OP op_code = OP();
 
 
+  ifstream ifs;
+  ifs.open(string(argv[1]));
   // op is OPCODE or ADDRESS LABEL
-  while(cin >> op){
+  while(ifs >> op){
     if(op.substr(0, 2) == "//"){
-      int c = cin.get();
-      while(c != '\n' && c != EOF) c = cin.get();
+      int c = ifs.get();
+      while(c != '\n' && c != EOF) c = ifs.get();
       continue;
     }
     cout << op << endl;
@@ -52,7 +54,7 @@ int main(int argc, char* argv[]){
       res.push_back((u_int16_t)0);
     }else{
       string arg;
-      cin >> arg;
+      ifs >> arg;
       if(arg[0] == '#'){
         res.push_back(op_code.v[op]);
         arg = arg.substr(1, arg.size()-1);
@@ -77,12 +79,14 @@ int main(int argc, char* argv[]){
   }
 
   ofstream ofs("dump.hex");
-  for(int i = 0; i < res.size(); i++){
-    if(i != 0) cout << " ";
-    cout << hex << res[i];
-    u_int16_t littleendian = swap_endian<u_int16_t>(res[i]);
-    ofs.write(reinterpret_cast<char *>(&littleendian), 2);
+  int i = 0;
+  while(i < res.size()){
+    ofs << "0x" << hex << res[i];
+    i++;
+    ofs << setfill('0') << setw(4) << hex << res[i] << endl;
+    i++;
   }
+  ifs.close();
   ofs.close();
   cout << endl;
   return 0;

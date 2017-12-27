@@ -1,3 +1,3 @@
 LDA #23
 RET
-STA 4
+SLA 4
