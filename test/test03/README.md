@@ -1,0 +1,2 @@
+# PURPOSE
+Check address labeling
