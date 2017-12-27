@@ -29,6 +29,7 @@
 #define JZI   0xa102
 #define CALLI 0xa012
 #define STAI  0xb000
+#define HALT 0x0000
 
 #include <vector>
 #include <map>
@@ -70,5 +71,6 @@ class OP{
       v.insert( std::pair<std::string, int> ("JZI"   , JZI)  );
       v.insert( std::pair<std::string, int> ("CALLI" , CALLI));
       v.insert( std::pair<std::string, int> ("STAI"  , STAI) );
+      v.insert( std::pair<std::string, int> ("HALT"  , HALT) );
     }
 };
