@@ -91,7 +91,7 @@ int main(int argc, char* argv[]){
   while(i < res.size()){
     ofs << "0x" << hex << res[i] << endl;;
     i++;
-    ofs << setfill('0') << setw(4) << hex << res[i] << endl;
+    ofs << "0x" << setfill('0') << setw(4) << hex << res[i] << endl;
     i++;
   }
   ifs.close();
