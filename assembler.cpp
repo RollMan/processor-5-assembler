@@ -49,6 +49,9 @@ int main(int argc, char* argv[]){
     }
 
     // OPCODE
+    if(op_code.v.find(op) == op_code.v.end()){
+      error("No such operator: " + op);
+    }
     if(op == "RET"){
       res.push_back(op_code.v[op]);
       res.push_back((u_int16_t)0);
