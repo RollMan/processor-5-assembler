@@ -1,5 +1,5 @@
 /*
- * 0x00 OP
+ * 0x00 opcode
  * 0x10 ARG
  * 0x20 OP
  * 0x30 ARG
@@ -16,7 +16,6 @@
 using namespace std;
 
 void error(string reason);
-template <typename T> T swap_endian(T u);
 
 int main(int argc, char* argv[]){
 
@@ -24,27 +23,30 @@ int main(int argc, char* argv[]){
     error("Usage: assembler FILENAME");
   }
 
-  string op;
   vector<u_int16_t> res;
   map<int, string> idx_label;
   map<string, int> label_addr;
   int addr = 0;
 
-  OP op_code = OP();
+  OP opname2opcode = OP();
 
 
   ifstream ifs;
   ifs.open(string(argv[1]));
-  // op is OPCODE or ADDRESS LABEL
-  while(ifs >> op){
-    if(op.substr(0, 2) == "//"){
+
+  // opecode is OPCODE or ADDRESS LABEL
+  string opname;
+  while(ifs >> opname){
+    // ignore COMMENT
+    if(opname.substr(0, 2) == "//"){
       int c = ifs.get();
       while(c != '\n' && c != EOF) c = ifs.get();
       continue;
     }
+
     // ADDRESS LABEL
-    if( op[ op.size() - 1 ] == ':' ){
-      string label = op.substr(0, op.size()-1);
+    if( opname[ opname.size() - 1 ] == ':' ){
+      string label = opname.substr(0, opname.size()-1);
       if(label_addr.find(label) != label_addr.end()){
         error("Duplicated label name");
       }
@@ -53,20 +55,21 @@ int main(int argc, char* argv[]){
     }
 
     // OPCODE
-    if(op_code.v.find(op) == op_code.v.end()){
-      error("No such operator: " + op);
+    if(opname2opcode.v.find(opname) == opname2opcode.v.end()){
+      error("No such operator: " + opname);
     }
-    if(op == "RET"){
-      res.push_back(op_code.v[op]);
+    if(opname == "RET" || opname == "HALT"){
+      // RET has no argument
+      res.push_back(opname2opcode.v[opname]);
       res.push_back((u_int16_t)0);
     }else{
       string arg;
       ifs >> arg;
       if(arg[0] == '#'){
-        res.push_back(op_code.v[op]);
+        res.push_back(opname2opcode.v[opname]);
         arg = arg.substr(1, arg.size()-1);
       }else{
-        res.push_back(op_code.v[op+"I"]);
+        res.push_back(opname2opcode.v[opname+"I"]);
       }
       if( isdigit(arg[0]) ){
         res.push_back( atoi(arg.c_str()) );
@@ -88,9 +91,7 @@ int main(int argc, char* argv[]){
   ofstream ofs("dump.hex");
   int i = 0;
   while(i < res.size()){
-    ofs << "0x" << hex << res[i] << endl;;
-    i++;
-    ofs << "0x" << setfill('0') << setw(4) << hex << res[i] << endl;
+    ofs << "0x" << setfill('0') << setw(4) << hex << res[i] << endl;;
     i++;
   }
   ifs.close();
@@ -102,22 +103,4 @@ int main(int argc, char* argv[]){
 void error(string reason){
   cout << reason << endl;
   exit(2);
-}
-template <typename T>
-T swap_endian(T u)
-{
-    static_assert (CHAR_BIT == 8, "CHAR_BIT != 8");
-
-    union
-    {
-        T u;
-        unsigned char u8[sizeof(T)];
-    } source, dest;
-
-    source.u = u;
-
-    for (size_t k = 0; k < sizeof(T); k++)
-        dest.u8[k] = source.u8[sizeof(T) - k - 1];
-
-    return dest.u;
 }
