@@ -42,7 +42,6 @@ int main(int argc, char* argv[]){
       while(c != '\n' && c != EOF) c = ifs.get();
       continue;
     }
-    cout << op << endl;
     // ADDRESS LABEL
     if( op[ op.size() - 1 ] == ':' ){
       string label = op.substr(0, op.size()-1);
@@ -96,7 +95,6 @@ int main(int argc, char* argv[]){
   }
   ifs.close();
   ofs.close();
-  cout << endl;
   return 0;
 }
 
