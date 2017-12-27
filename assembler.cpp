@@ -19,6 +19,11 @@ void error(string reason);
 template <typename T> T swap_endian(T u);
 
 int main(int argc, char* argv[]){
+
+  if(argc != 2){
+    error("Usage: assembler FILENAME");
+  }
+
   string op;
   vector<u_int16_t> res;
   map<int, string> idx_label;
@@ -84,7 +89,7 @@ int main(int argc, char* argv[]){
   ofstream ofs("dump.hex");
   int i = 0;
   while(i < res.size()){
-    ofs << "0x" << hex << res[i];
+    ofs << "0x" << hex << res[i] << endl;;
     i++;
     ofs << setfill('0') << setw(4) << hex << res[i] << endl;
     i++;
