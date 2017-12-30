@@ -27,6 +27,7 @@ int main(int argc, char* argv[]){
   map<int, string> idx_label;
   map<string, int> label_addr;
   int addr = 0;
+  bool prev_also_label = false;
 
   OP opname2opcode = OP();
 
@@ -50,9 +51,13 @@ int main(int argc, char* argv[]){
       if(label_addr.find(label) != label_addr.end()){
         error("Duplicated label name");
       }
-      label_addr[ label ] = addr;
+      if(prev_also_label == true){
+        addr++;
+        label_addr[ label ] = addr;
+      }
       continue;
     }
+    prev_also_label = false;
 
     // OPCODE
     if(opname2opcode.v.find(opname) == opname2opcode.v.end()){
