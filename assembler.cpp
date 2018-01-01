@@ -63,7 +63,7 @@ int main(int argc, char* argv[]){
     if(opname2opcode.v.find(opname) == opname2opcode.v.end()){
       error("No such operator: " + opname);
     }
-    if(opname == "RET" || opname == "HALT"){
+    if(opname == "RET" || opname == "HALT" || opname == "LAA"){
       // RET has no argument
       res.push_back(opname2opcode.v[opname]);
       res.push_back((u_int16_t)0);
