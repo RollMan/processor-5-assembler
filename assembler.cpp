@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
         error("Duplicated label name");
       }
       if(prev_also_label == true){
-        addr++;
+        addr+=2;
       }
       label_addr[ label ] = addr;
       continue;
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]){
       }
     }
 
-    addr++;
+    addr+=2;
   }
 
   for(map<int, string>::iterator it = idx_label.begin(); it != idx_label.end(); it++){
