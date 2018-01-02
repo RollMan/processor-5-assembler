@@ -19,8 +19,9 @@ void error(string reason);
 
 int main(int argc, char* argv[]){
 
-  if(argc != 2){
-    error("Usage: assembler FILENAME");
+  if(!(2 <= argc && argc <= 3)){
+    cout << argc << endl;
+    error("Usage: assembler FILENAME [output filename]");
   }
 
   vector<u_int16_t> res;
@@ -74,7 +75,6 @@ int main(int argc, char* argv[]){
       if(arg[0] == '#'){
         res.push_back(opname2opcode.v[opname]);
         arg = arg.substr(1, arg.size()-1);
-        cout << opname << " #" << arg << endl;
       }else{
         res.push_back(opname2opcode.v[opname+"I"]);
       }
@@ -99,12 +99,22 @@ int main(int argc, char* argv[]){
   int ext_i = filename.find_last_of(".");
   if(path_i == string::npos){
     path_i = 0;
+  }else{
+    path_i++;
   }
   if(ext_i == string::npos){
     cerr << "filename error" << endl;
     exit(1);
   }
-  ofstream ofs(filename.substr(path_i,ext_i-path_i) + ".hex");
+
+  string output_filename;
+  if(argc == 2){
+    output_filename = filename.substr(path_i,ext_i-path_i) + ".hex";
+  }else{
+    output_filename = string(argv[2]);
+  }
+  cout << "Output hex file into " + output_filename << endl;
+  ofstream ofs(output_filename);
   int i = 0;
   while(i < res.size()){
     ofs << "0x" << setfill('0') << setw(4) << hex << res[i] << endl;;
@@ -117,6 +127,6 @@ int main(int argc, char* argv[]){
 
 
 void error(string reason){
-  cout << reason << endl;
+  cerr << reason << endl;
   exit(2);
 }
