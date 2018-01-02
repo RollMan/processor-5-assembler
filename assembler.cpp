@@ -32,8 +32,9 @@ int main(int argc, char* argv[]){
   OP opname2opcode = OP();
 
 
+  string filename = string(argv[1]);
   ifstream ifs;
-  ifs.open(string(argv[1]));
+  ifs.open(filename);
 
   // opecode is OPCODE or ADDRESS LABEL
   string opname;
@@ -53,8 +54,8 @@ int main(int argc, char* argv[]){
       }
       if(prev_also_label == true){
         addr++;
-        label_addr[ label ] = addr;
       }
+      label_addr[ label ] = addr;
       continue;
     }
     prev_also_label = false;
@@ -73,6 +74,7 @@ int main(int argc, char* argv[]){
       if(arg[0] == '#'){
         res.push_back(opname2opcode.v[opname]);
         arg = arg.substr(1, arg.size()-1);
+        cout << opname << " #" << arg << endl;
       }else{
         res.push_back(opname2opcode.v[opname+"I"]);
       }
@@ -93,7 +95,16 @@ int main(int argc, char* argv[]){
     res[idx] = label_addr[label];
   }
 
-  ofstream ofs("dump.hex");
+  int path_i = filename.find_last_of("/");
+  int ext_i = filename.find_last_of(".");
+  if(path_i == string::npos){
+    path_i = 0;
+  }
+  if(ext_i == string::npos){
+    cerr << "filename error" << endl;
+    exit(1);
+  }
+  ofstream ofs(filename.substr(path_i,ext_i-path_i) + ".hex");
   int i = 0;
   while(i < res.size()){
     ofs << "0x" << setfill('0') << setw(4) << hex << res[i] << endl;;
